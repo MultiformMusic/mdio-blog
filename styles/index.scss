@@ -1,6 +1,6 @@
 html, body {
     height: 100%;
-    font-family: Nunito, sans-serif;
+    font-family: Nunito, sans-serif !important;
     font-style: normal;
     font-size: 14px;
     font-weight: 300;
@@ -35,6 +35,10 @@ html, body {
       z-index: 2;
       padding: 20px;
       padding-bottom: 40px;
+
+      &.no-image {
+        min-height: auto;
+      }
     }
   
     .card-body {
@@ -145,6 +149,12 @@ html, body {
         text-transform: uppercase;
         letter-spacing: 1px;
         font-weight: bold;
+
+        a {
+          color: black;
+          font-weight: 900;
+          text-decoration: none;
+        }
       }
   
       &-item {
@@ -226,6 +236,16 @@ html, body {
   .blog-image {
     margin-bottom: 10px;
     text-align: center;
+
+    &-left {
+      float: left;
+      margin-right: 30px;
+    }
+
+    &-right {
+      float: right;
+      margin-left: 30px
+    }
   }
   .image-alt {
     margin-top: 3px;

@@ -1,38 +1,62 @@
-
-import { Row, Col } from 'react-bootstrap';
+import { Row, Button } from 'react-bootstrap';
 import PageLayout from 'components/PageLayout';
 import AuthorIntro from 'components/AuthorIntro';
-import CardListItem from 'components/CardListItem';
-import CardItem from 'components/CardItem';
+import FilteringMenu from 'components/FilteringMenu';
+import { useState } from 'react';
+import { useGetBlogsPages } from 'actions/pagination';
+import { getAllBlogs } from 'lib/api';
 
 
-export default () => {
+export default ({blogs}) => {
+
+  const [filter, setFilter] = useState({
+    view: {list: 0},
+    date: {asc: 0}
+  }); 
+
+  const { pages, isLoadingMore, isReachingEnd, loadMore } = useGetBlogsPages({blogs, filter})
 
   return(
-
-
     <PageLayout>
-
       <AuthorIntro/>
+
+      <FilteringMenu 
+        filter={filter}
+        onChange={(option, value) => {
+          setFilter({...filter, [option]: value})
+        }} />
 
       <hr/>
 
       <Row className="mb-5">
-        <Col md="10">
-
-          <CardListItem />
-
-        </Col>
-
-        <Col md="4">
-
-          <CardItem />
-
-        </Col>
+        {pages}
       </Row>
+      <div style={{textAlign: 'center'}}>
+        <Button 
+          onClick={loadMore} 
+          variant="outline-secondary" 
+          size="lg"
+          disabled={isReachingEnd || isLoadingMore}
+        >
+          { isLoadingMore ? '...' : isReachingEnd ? 'No more blogs' : 'More Blogs'}
 
-
+        </Button>
+      </div>
     </PageLayout>
 
   )
+}
+
+// this function is called during build time (only on the server)
+// provides props to page
+// it will create static page
+export async function getStaticProps() {
+
+  const blogs = await getAllBlogs({offset: 0, date: 'desc'});
+
+  return {
+    props: {
+      blogs
+    }
+  }
 }
