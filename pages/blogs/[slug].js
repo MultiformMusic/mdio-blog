@@ -6,8 +6,24 @@ import { getBlogBySlug, getAllBlogs, urlFor } from 'lib/api';
 import BlogHeader from 'components/BlogHeader';
 import BlogContent from 'components/BlogContent';
 import moment from 'moment';
+import { useRouter } from 'next/router';
+import ErrorPage from 'next/error';
 
 const BlogDetail = ({blog}) => {
+
+    const router = useRouter();
+
+    if (!router.isFallback && !blog?.slug) {
+        return <ErrorPage statusCode="404" />
+    }
+
+    if (router.isFallback) {
+        return (
+            <PageLayout className="blog-detail-page">
+                Loading ...
+            </PageLayout>
+        )
+    }
 
     return (
         <PageLayout className="blog-detail-page">
@@ -48,7 +64,7 @@ export async function getStaticPaths() {
 
     return {
         paths,
-        fallback: false
+        fallback: true
     }
 }
 
