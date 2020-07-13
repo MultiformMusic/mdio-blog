@@ -5,9 +5,10 @@ import FilteringMenu from 'components/FilteringMenu';
 import { useState } from 'react';
 import { useGetBlogsPages } from 'actions/pagination';
 import { getPaginatedBlogs } from 'lib/api';
+import PreviewAlert from 'components/PreviewAlert';
 
 
-export default ({blogs}) => {
+export default ({blogs, preview}) => {
 
   const [filter, setFilter] = useState({
     view: {list: 0},
@@ -18,6 +19,9 @@ export default ({blogs}) => {
 
   return(
     <PageLayout>
+
+      { preview && <PreviewAlert />}
+
       <AuthorIntro/>
 
       <FilteringMenu 
@@ -50,13 +54,13 @@ export default ({blogs}) => {
 // this function is called during build time (only on the server)
 // provides props to page
 // it will create static page
-export async function getStaticProps() {
+export async function getStaticProps({preview = false}) {
 
   const blogs = await getPaginatedBlogs({offset: 0, date: 'desc'});
 
   return {
     props: {
-      blogs
+      blogs, preview
     }
   }
 }

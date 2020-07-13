@@ -8,8 +8,9 @@ import BlogContent from 'components/BlogContent';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
+import PreviewAlert from 'components/PreviewAlert';
 
-const BlogDetail = ({blog}) => {
+const BlogDetail = ({blog, preview}) => {
 
     const router = useRouter();
 
@@ -29,18 +30,19 @@ const BlogDetail = ({blog}) => {
         <PageLayout className="blog-detail-page">
             <Row>
                 <Col md={{ span: 10, offset: 1 }}>
-                <BlogHeader 
-                    title={blog.title} 
-                    subtitle={blog.subtitle} 
-                    author={blog.author} 
-                    coverImage={urlFor(blog.coverImage).height(500).url()} 
-                    date={moment(blog.date).format('LL')} 
-                />
+                    { preview && <PreviewAlert />}
+                    <BlogHeader 
+                        title={blog.title} 
+                        subtitle={blog.subtitle} 
+                        author={blog.author} 
+                        coverImage={urlFor(blog.coverImage).height(500).url()} 
+                        date={moment(blog.date).format('LL')} 
+                    />
 
-                <hr/>
-                    {
-                        blog.content && <BlogContent content={blog.content} />
-                    }
+                    <hr/>
+                        {
+                            blog.content && <BlogContent content={blog.content} />
+                        }
 
                 </Col>
             </Row>
@@ -48,12 +50,12 @@ const BlogDetail = ({blog}) => {
     )
 }
 
-export async function getStaticProps({params}) {
-    
-    const blog = await getBlogBySlug(params.slug);
+export async function getStaticProps({params, preview= false, previewData}) {
+
+    const blog = await getBlogBySlug(params.slug, preview);
 
     return {
-        props: {blog}
+        props: {blog, preview}
     }
 }
 
