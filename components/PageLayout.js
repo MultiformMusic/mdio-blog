@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import Head from 'next/head';
+// import Head from 'next/head';
 import BlogNavbar from "./Navbar";
 import { useTheme } from 'providers/ThemeProvider';
 
@@ -9,9 +9,9 @@ const PageLayout = ({children, className}) => {
 
     return (
         <div className={theme.type}>    
-            <Head>
+            {/* <Head>
                 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet" />
-            </Head>
+            </Head> */}
             <Container>
                 
                 <BlogNavbar
